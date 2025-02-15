@@ -5,6 +5,10 @@ FROM grafana/k6:latest
 USER root
 RUN apk update && apk add --no-cache chromium
 
+# Create a non-root user
+RUN adduser -D k6user
+USER k6user
+
 # Set environment variables for k6 browser module
 ENV K6_BROWSER_ENABLED=true
 ENV K6_BROWSER_HEADLESS=true
