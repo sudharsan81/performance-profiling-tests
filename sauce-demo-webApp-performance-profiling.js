@@ -47,7 +47,7 @@ export default async function() {
 
         console.log('Navigated to the login page.');
         await page.locator('input[name="user-name"]').type("standard_user");
-        await page.locator('input[name="password"]').type("secret_sauce"); // publicly available. So no harm in using it as 
+        await page.locator('input[name="password"]').type("secret_sauce"); // publicly available. So no harm in using directly as plain txt 
 
         console.log('Login into the account.');
         await Promise.all([
