@@ -14,18 +14,20 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v3
-      - name: Install node.js  # We will install k6 as a global Node module
-        uses: actions/setup-node@v3
-        with:
-          node-version: '23.6.1'
+
       - name: Install k6
-        run: npm install -g k6
+        run: |
+          curl -sL https://k6.io/docs/install.sh | sh
+          sudo cp /usr/local/bin/k6 /usr/bin/k6
+
       - name: Set K6_CLOUD_API_TOKEN
         env:
           K6_CLOUD_API_TOKEN: ${{ secrets.K6_CLOUD_API_TOKEN }}
         run: echo "K6_CLOUD_API_TOKEN=${K6_CLOUD_API_TOKEN}" >> $GITHUB_ENV
+
       - name: Login to k6 Cloud
         run: k6 cloud login --token "$K6_CLOUD_API_TOKEN"
+
       - name: Run k6 Performance Test
         id: k6_test
         run: k6 run --out cloud sauce-demo-webApp-performance-profiling.js
