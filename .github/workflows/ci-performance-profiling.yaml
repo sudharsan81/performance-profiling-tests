@@ -15,10 +15,8 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v3
 
-      - name: Install k6
-        run: |
-          curl -sL https://k6.io/docs/install.sh | sh
-          sudo cp /usr/local/bin/k6 /usr/bin/k6
+      - name: Setup k6
+        uses: grafana/setup-k6-action@v1
 
       - name: Set K6_CLOUD_API_TOKEN
         env:
