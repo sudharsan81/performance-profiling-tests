@@ -1,19 +1,8 @@
-# Use an official Ubuntu base image
-FROM ubuntu:latest
+# Use the official grafana/k6 image as the base image
+FROM grafana/k6:latest
 
-# Install necessary packages
-RUN apt-get update && apt-get install -y \
-    curl \
-    git \
-    && rm -rf /var/lib/apt/lists/*
+# Copy your k6 script into the container
+COPY sauce-demo-webApp-performance-profiling.js /sauce-demo-webApp-performance-profiling.js
 
-# Install Node.js (if needed)
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
-RUN apt-get install -y nodejs
-
-# Install k6
-RUN curl -sL https://k6.io/docs/install.sh | sh
-RUN sudo cp /usr/local/bin/k6 /usr/bin/k6
-
-# Install k6 browser module (if needed)
-RUN npm install -g k6@browser
+# Define the command to run the k6 script
+CMD ["run", "/sauce-demo-webApp-performance-profiling.js"]
