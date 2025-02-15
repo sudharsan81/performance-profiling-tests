@@ -1,4 +1,5 @@
-FROM grafana/k6:latest
+# Use an official Ubuntu base image
+FROM ubuntu:latest
 
 # Install necessary packages
 RUN apt-get update && apt-get install -y \
@@ -6,13 +7,13 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Set up k6
-RUN curl -sL https://k6.io/docs/install.sh | sh
-RUN sudo cp /usr/local/bin/k6 /usr/bin/k6
-
-# Set up Node.js (if needed)
+# Install Node.js (if needed)
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get install -y nodejs
 
-# Install k6 browser module
+# Install k6
+RUN curl -sL https://k6.io/docs/install.sh | sh
+RUN sudo cp /usr/local/bin/k6 /usr/bin/k6
+
+# Install k6 browser module (if needed)
 RUN npm install -g k6@browser
