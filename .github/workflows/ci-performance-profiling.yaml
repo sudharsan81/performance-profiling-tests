@@ -28,7 +28,7 @@ jobs:
           context: .
           file: ./Dockerfile
           tags: my-k6-image:latest
-          push: false
+          load: true  # Load the image into Docker
 
       - name: Set K6_CLOUD_API_TOKEN
         env:
