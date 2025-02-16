@@ -58,7 +58,7 @@ jobs:
           script: |
             const url = process.env.K6_URL;
             const prNumber = context.payload.pull_request.number;
-            const comment = `k6 Performance Test URL: ${url}`;
+            const comment = `k6 Performance Test Report URL: ${url}`;
 
             github.rest.issues.createComment({
               issue_number: prNumber,
