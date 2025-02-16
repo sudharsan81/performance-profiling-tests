@@ -39,10 +39,15 @@ jobs:
           K6_CLOUD_API_TOKEN: ${{ secrets.K6_CLOUD_API_TOKEN }}
         run: echo "K6_CLOUD_API_TOKEN=${K6_CLOUD_API_TOKEN}" >> $GITHUB_ENV
 
+      - name: Read K6_CLOUD_PROJECT_ID and set in CI Workflow
+        env:
+          K6_CLOUD_PROJECT_ID: ${{ secrets.K6_CLOUD_PROJECT_ID }}
+        run: echo "K6_CLOUD_PROJECT_ID=${K6_CLOUD_PROJECT_ID}" >> $GITHUB_ENV
+
       - name: Run k6 Performance Test in Docker Container
         id: k6_test
         run: |
-          docker run --rm -e K6_CLOUD_API_TOKEN=${{ secrets.K6_CLOUD_API_TOKEN }} perf-profiling-tests:latest > k6_output.txt
+          docker run --rm -e K6_CLOUD_API_TOKEN=${{ secrets.K6_CLOUD_API_TOKEN }} -e K6_CLOUD_PROJECT_ID=${{ secrets.K6_CLOUD_PROJECT_ID }} perf-profiling-tests:latest > k6_output.txt
           cat k6_output.txt
           URL=$(grep -oP 'https://\S+' k6_output.txt)
           echo "GRAFANA_K6_TEST_REPORT_URL=$URL" >> $GITHUB_ENV

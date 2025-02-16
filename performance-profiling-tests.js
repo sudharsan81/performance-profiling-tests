@@ -5,11 +5,12 @@ const getCloudConfig = () => {
   // If k6 cloud api token is set in the Env Var K6_CLOUD_API_TOKEN
   // then output will be sent to cloud. Else output results to console.
   const k6CloudApiToken = __ENV.K6_CLOUD_API_TOKEN;
+  const k6CloudProjectId = __ENV.K6_CLOUD_PROJECT_ID;
   let config = undefined;
 
-  if (k6CloudApiToken) {
+  if (k6CloudApiToken && k6CloudProjectId) {
     config = {
-      projectID: 3747395,
+      projectID: k6CloudProjectId,
       name: 'k6.io basic load test - ci',
     }
   }
