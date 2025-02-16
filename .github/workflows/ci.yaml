@@ -12,6 +12,10 @@ jobs:
   build-and-run-tests:
     runs-on: ubuntu-latest
 
+    permissions:
+      issues: write
+      pull-requests: write
+
     steps:
       - name: Checkout the code
         uses: actions/checkout@v3
@@ -40,4 +44,25 @@ jobs:
 
       - name: Run k6 Performance Test
         id: k6_test
-        run: docker run --rm -e K6_CLOUD_API_TOKEN=${{ secrets.K6_CLOUD_API_TOKEN }} my-k6-image:latest
+        run: |
+          docker run --rm -e K6_CLOUD_API_TOKEN=${{ secrets.K6_CLOUD_API_TOKEN }} my-k6-image:latest > k6_output.txt
+          cat k6_output.txt
+          URL=$(grep -oP 'https://\S+' k6_output.txt)
+          echo "K6_URL=$URL" >> $GITHUB_ENV
+
+      - name: Add k6 URL as PR comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const url = process.env.K6_URL;
+            const prNumber = context.payload.pull_request.number;
+            const comment = `k6 Performance Test URL: ${url}`;
+
+            github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
