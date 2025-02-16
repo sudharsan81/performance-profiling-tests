@@ -3,7 +3,7 @@ import { sleep } from 'k6';
 
 const getCloudConfig = () => {
   // If k6 cloud api token is set in the Env Var K6_CLOUD_API_TOKEN
-  // then output will be sent to cloud. Else output to console
+  // then output will be sent to cloud. Else output results to console.
   const k6CloudApiToken = __ENV.K6_CLOUD_API_TOKEN;
   let config = undefined;
 

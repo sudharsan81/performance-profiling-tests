@@ -1,19 +1,14 @@
-# Web Load tests
+# Performance Profiling tests
 
-Web load tests perform performance profiling. They run web apps concurrently, mimicking real-world user traffic and behavior, and monitor key web performance metrics (Web Vitals):
+These tests measure web app performance metrics during simulated user journeys.  Using k6, they concurrently run user flows against a target URL (e.g., https://www.saucedemo.com/), capturing Web Vitals:
 
-*   Largest Contentful Paint (LCP)
-*   First Input Delay (FID)
-*   Cumulative Layout Shift (CLS)
-*   First Contentful Paint (FCP)
-*   Interaction to Next Paint (INP)
-*   Time to First Byte (TTFB)
-
-This demo uses k6 to load test https://www.saucedemo.com/, navigating to the product page and capturing these metrics.
-
-Tests can be run in two ways:
-1.  Locally, with metrics displayed in the console.
-2.  Locally, with metrics sent to Grafana k6 Cloud for analysis and comparison between runs.  This allows for easy identification of performance regressions.
+Largest Contentful Paint (LCP)
+First Input Delay (FID)
+Cumulative Layout Shift (CLS)
+First Contentful Paint (FCP)
+Interaction to Next Paint (INP)
+Time to First Byte (TTFB)
+Tests can be executed locally, with metrics displayed in the console, or locally with metrics sent to Grafana k6 Cloud for analysis and comparison across runs.  Grafana k6 Cloud facilitates performance regression identification.
 
 ## Prerequisites
 - k6, latest version
