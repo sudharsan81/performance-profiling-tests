@@ -28,12 +28,14 @@ brew install k6
 1. Local Execution (Console Output)
 ```bash
 unset K6_CLOUD_API_TOKEN
+unset K6_CLOUD_PROJECT_ID
 k6 run performance-profiling-tests.js
 ```
 
 2. Local Execution (Grafana k6 Cloud Output)
 ```bash
 export K6_CLOUD_API_TOKEN=<Your grafanna k6 cloud Token>
+export K6_CLOUD_PROJECT_ID=<Your grafanna k6 cloud project Id>  # Welcome to use mine 3747395
 k6 run performance-profiling-tests.js --out cloud
 ```
 

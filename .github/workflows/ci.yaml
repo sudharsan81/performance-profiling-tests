@@ -9,7 +9,7 @@ on:
       - '**'  # Trigger on all branches
 
 jobs:
-  build-and-run-tests:
+  performance-profiling-tests:
     runs-on: ubuntu-latest
 
     permissions:
@@ -31,24 +31,26 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          tags: my-k6-image:latest
+          tags: perf-profiling-tests:latest
           load: true  # Load the image into Docker
 
-      - name: Set K6_CLOUD_API_TOKEN
+      - name: Read K6_CLOUD_API_TOKEN and set in CI Workflow
         env:
           K6_CLOUD_API_TOKEN: ${{ secrets.K6_CLOUD_API_TOKEN }}
         run: echo "K6_CLOUD_API_TOKEN=${K6_CLOUD_API_TOKEN}" >> $GITHUB_ENV
 
-      - name: Login to k6 Cloud
-        run: k6 cloud login --token "$K6_CLOUD_API_TOKEN"
+      - name: Read K6_CLOUD_PROJECT_ID and set in CI Workflow
+        env:
+          K6_CLOUD_PROJECT_ID: ${{ secrets.K6_CLOUD_PROJECT_ID }}
+        run: echo "K6_CLOUD_PROJECT_ID=${K6_CLOUD_PROJECT_ID}" >> $GITHUB_ENV
 
-      - name: Run k6 Performance Test
+      - name: Run k6 Performance Test in Docker Container
         id: k6_test
         run: |
-          docker run --rm -e K6_CLOUD_API_TOKEN=${{ secrets.K6_CLOUD_API_TOKEN }} my-k6-image:latest > k6_output.txt
+          docker run --rm -e K6_CLOUD_API_TOKEN=${{ secrets.K6_CLOUD_API_TOKEN }} -e K6_CLOUD_PROJECT_ID=${{ secrets.K6_CLOUD_PROJECT_ID }} perf-profiling-tests:latest > k6_output.txt
           cat k6_output.txt
           URL=$(grep -oP 'https://\S+' k6_output.txt)
-          echo "K6_URL=$URL" >> $GITHUB_ENV
+          echo "GRAFANA_K6_TEST_REPORT_URL=$URL" >> $GITHUB_ENV
 
       - name: Add k6 URL as PR comment
         if: github.event_name == 'pull_request'
@@ -56,7 +58,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const url = process.env.K6_URL;
+            const url = process.env.GRAFANA_K6_TEST_REPORT_URL;
             const prNumber = context.payload.pull_request.number;
             const comment = `k6 Performance Test Report URL: ${url}`;
 

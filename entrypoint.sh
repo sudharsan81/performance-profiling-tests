@@ -6,6 +6,12 @@ if [ -z "$K6_CLOUD_API_TOKEN" ]; then
   exit 1
 fi
 
+# Check if K6_CLOUD_PROJECT_ID is set
+if [ -z "$K6_CLOUD_PROJECT_ID" ]; then
+  echo "K6_CLOUD_PROJECT_ID is not set. Exiting."
+  exit 1
+fi
+
 # Perform k6 cloud login
 k6 cloud login --token $K6_CLOUD_API_TOKEN
 
