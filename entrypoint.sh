@@ -15,5 +15,5 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-# Run k6 with the provided token
+# Run k6 tests and send the results to grafana k6 cloud
 k6 run ./performance-profiling-tests.js --out cloud
