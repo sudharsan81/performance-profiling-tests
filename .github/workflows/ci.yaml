@@ -6,11 +6,15 @@ on:
       - 'main'
   pull_request:
     branches:
-      - '**'
+      - '**'  # Trigger on all branches
 
 jobs:
   build-and-run-tests:
     runs-on: ubuntu-latest
+
+    permissions:
+      issues: write
+      pull-requests: write
 
     steps:
       - name: Checkout the code
