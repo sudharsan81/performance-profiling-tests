@@ -1,20 +1,15 @@
-# Use the official grafana/k6 image as the base image
-FROM grafana/k6:latest
+FROM grafana/k6:master-with-browser
 
-# Install Chromium
-USER root
-RUN apk update && apk add --no-cache chromium
-
-# Create a non-root user
-RUN adduser -D k6user
-USER k6user
+WORKDIR /tests
 
 # Set environment variables for k6 browser module
 ENV K6_BROWSER_ENABLED=true
 ENV K6_BROWSER_HEADLESS=true
 
-# Copy your k6 script into the container
-COPY sauce-demo-webApp-performance-profiling.js /sauce-demo-webApp-performance-profiling.js
+COPY . .
 
-# Define the command to run the k6 script
-CMD ["run", "/sauce-demo-webApp-performance-profiling.js"]
+# Use an entrypoint script to handle the K6_CLOUD_API_TOKEN
+COPY entrypoint.sh /entrypoint.sh
+# RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]

@@ -33,13 +33,13 @@ brew install k6
 1. Local Execution (Console Output)
 ```bash
 unset K6_CLOUD_API_TOKEN
-k6 run sauce-demo-webApp-performance-profiling.js
+k6 run performance-profiling-tests.js
 ```
 
 2. Local Execution (Grafana k6 Cloud Output)
 ```bash
 export K6_CLOUD_API_TOKEN=<Your grafanna k6 cloud Token>
-k6 run sauce-demo-webApp-performance-profiling.js --out cloud
+k6 run performance-profiling-tests.js --out cloud
 ```
 
 After running the cloud test, k6 will output a report URL similar to https://sudharsans.grafana.net/a/k6-app/runs/3989499.  Use this URL to view the test results in your Grafana k6 Cloud dashboard.

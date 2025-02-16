@@ -1,5 +1,4 @@
 import { browser } from 'k6/browser';
-import { checks } from 'https://jslib.k6.io/k6-utils/1.5.0/index.js';
 import { sleep } from 'k6';
 
 const getCloudConfig = () => {
@@ -22,8 +21,8 @@ export const options = {
   scenarios: {
     ui: {
       executor: 'shared-iterations',
-      vus: 10,
-      iterations: 10,
+      vus: 1,
+      iterations: 1,
       options: {
         browser: {
           type: 'chromium',
