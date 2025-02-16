@@ -1,0 +1,43 @@
+name: Performance Profiling
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - '**'  # Trigger on all branches
+
+jobs:
+  build-and-run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Set up k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./Dockerfile
+          tags: my-k6-image:latest
+          load: true  # Load the image into Docker
+
+      - name: Set K6_CLOUD_API_TOKEN
+        env:
+          K6_CLOUD_API_TOKEN: ${{ secrets.K6_CLOUD_API_TOKEN }}
+        run: echo "K6_CLOUD_API_TOKEN=${K6_CLOUD_API_TOKEN}" >> $GITHUB_ENV
+
+      - name: Login to k6 Cloud
+        run: k6 cloud login --token "$K6_CLOUD_API_TOKEN"
+
+      - name: Run k6 Performance Test
+        id: k6_test
+        run: docker run --rm -e K6_CLOUD_API_TOKEN=${{ secrets.K6_CLOUD_API_TOKEN }} my-k6-image:latest
